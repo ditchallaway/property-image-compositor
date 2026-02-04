@@ -1,83 +1,53 @@
 # Property Image Compositor
 
-> Component 2 of **Virtual Drone Photography for Real Estate**
+> **⚠️ CRITICAL ARCHITECTURE REQUIREMENT**: This repository is NOT a standalone application. It is a library of Python scripts designed to be executed by **n8n's external Python runner**.
 
-Automated Python service that transforms raw 3D renders into client-deliverable property images by adding styled boundary overlays, perspective acres text, and billboard street labels.
+## Execution Environment Guardrails
+
+1. **Host Environment**: Runs inside an alpine-based Docker container managed by n8n.
+2. **Trigger**: Executed via n8n workflows after [Robotic Property Photographer](https://github.com/ditchallaway/Robotic-Property-Photographer) finishes.
+3. **No Web Server**: Do NOT implement FastAPI, Flask, or any HTTP listener.
+4. **No Database**: All state is ephemeral or passed via JSON payloads/file system.
+5. **No Standalone Dockerfile**: The environment is defined by the `runners/Dockerfile` in the main n8n setup.
 
 ---
 
 ## Overview
 
-This compositor consumes outputs from [Robotic Property Photographer](https://github.com/ditchallaway/Robotic-Property-Photographer):
-- **Input**: Raw PNG renders + sidecar JSON (3D coordinates, camera matrices, street data)
-- **Output**: Final composed images ready for delivery
+Automated Python module that transforms raw 3D renders into deliverable property images.
+
+### Input/Output (n8n Bind Mounts)
+- **Input**: Raw PNGs + Sidecar JSON in `/data/shared/`
+- **Output**: Final composed images in `/data/generated/`
 
 ### Key Features
 - **3D Tubular Boundary Overlays** - Yellow stroke with depth effects
-- **Perspective Acres Text** - Follows ground plane with full 3D projection
+- **Perspective Acres Text** - Tilted to match ground plane
 - **Billboard Street Labels** - Camera-facing, perpendicular to ground
-- **Configurable Styling** - External config for colors, fonts, shadows
 
 ---
 
-## Quick Links
-
-- [Implementation Plan](./IMPLEMENTATION_PLAN.md) - Full technical specification
-- [Task Checklist](./TASK.md) - Development progress
-- [Examples](./examples/) - Before/after visual references
-
----
-
-## Architecture
+## n8n Integration Flow
 
 ```mermaid
-flowchart LR
-    A[Robotic Property<br/>Photographer] -->|PNG + JSON| B[Compositor]
-    B -->|Final PNG| C[SureCart<br/>Delivery]
-    D[n8n Workflow] -.triggers.-> A
-    D -.triggers.-> B
+sequenceDiagram
+    participant n8n as n8n Workflow
+    participant Robot as Robotic Property Photographer
+    participant Comp as Compositor (Python Runner)
+    
+    n8n->>Robot: HTTP POST /api/render
+    Robot-->>n8n: PNG + Sidecar JSON (Stored in /data/shared)
+    n8n->>Comp: Execute Python Script
+    Comp->>Comp: Projection & Drawing Logic
+    Comp-->>n8n: Success/Path to /data/generated
 ```
 
-**Deployment**: Runs in n8n's external Python runner environment
-
 ---
 
-## Sample Output
+## Next Steps for AI Assistants
 
-See the `examples/` folder for before/after comparisons showing:
-- 3D boundary effect style
-- Perspective acres text placement
-- Billboard street label rendering
+Always refer to [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) for the mathematical projection logic and styling requirements.
 
----
-
-## Development Status
-
-- [x] Planning & architecture design
-- [ ] Core projection implementation
-- [ ] Boundary renderer
-- [ ] Text placement systems
-- [ ] n8n integration
-- [ ] Visual verification
-
-See [TASK.md](./TASK.md) for detailed progress.
-
----
-
-## Technical Stack
-
-- **Python 3.x** with Pillow, NumPy, PyCairo
-- **n8n** for workflow orchestration
-- **Matrix-based 3D projection** from sidecar JSON
-
----
-
-## Related Projects
-
-- [Robotic Property Photographer](https://github.com/ditchallaway/Robotic-Property-Photographer) - Upstream renderer (Component 1)
-
----
-
-## License
-
-MIT
+- [ ] Implement `project.py` using NumPy for matrix operations
+- [ ] Implement `draw.py` using Pillow/PyCairo
+- [ ] Implement `compose.py` as the entry point for n8n
