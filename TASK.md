@@ -8,16 +8,17 @@
 - [x] Plan n8n integration interface
 
 ## Implementation
-- [ ] Set up Python project structure
-- [ ] Implement matrix-based 3D → 2D projection
-- [ ] Create boundary overlay renderer
-- [ ] Create billboard text placement system
-- [ ] Add styling configuration (fonts, colors, effects)
-- [ ] Build main composition pipeline
+- [x] Set up Python project structure
+- [x] Implement matrix-based 3D → 2D projection
+- [x] Create boundary overlay renderer
+- [x] Create billboard text placement system
+- [x] Add styling configuration (fonts, colors, effects)
+- [x] Build main composition pipeline
 
 ## Verification
-- [ ] Test with sample sidecar JSON from renderer
-- [ ] Verify boundary overlay alignment
-- [ ] Verify street label legibility and positioning
-- [ ] Test across different property sizes and camera angles
-- [ ] Create n8n workflow integration
+- [x] Verify n8n runner environment (Smoke Test OK)
+- [x] Test with sample sidecar JSON from renderer
+- [x] Verify boundary overlay alignment
+- [x] Verify street label legibility and positioning
+- [x] Test across different property sizes and camera angles
+- [x] Create n8n workflow integration (Ready for n8n)
