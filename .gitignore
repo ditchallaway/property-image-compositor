@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Project Specific
+output/
+tmp/
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
