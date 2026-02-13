@@ -54,7 +54,10 @@ def draw_acres_label(ctx, centroid_3d, acres, view_matrix, proj_matrix, config, 
     Draws the acre label centered on the property.
     Currently uses perspective billboard style.
     """
-    text = f"{acres} Acres"
+    # Format acres: rounded to 1 decimal place (e.g., "6.5") and uppercase
+    # If integer, show no decimal? Standard logic: .1f or .2f
+    formatted_acres = f"{acres:.1f}" if isinstance(acres, (int, float)) else str(acres)
+    text = f"{formatted_acres} ACRES"
     pos = world_to_screen(centroid_3d, view_matrix, proj_matrix, viewport_width, viewport_height, enu_transform)
     if not pos:
         return
