@@ -2,6 +2,8 @@
 
 Standalone Python microservice that transforms raw 3D renders into deliverable property images. Exposes a REST API via **FastAPI** and runs in its own Docker container.
 
+> **Migration Note:** This project previously ran as a stateless script inside n8n's Python runner — an n8n Code node would call `python3 compose.py --png ... --json ...` directly. The runner's locked-down Alpine container imposed hard constraints (no web server, no pip at runtime, fixed deps) that made development brittle. Now the compositor runs as its own FastAPI service in a separate container. n8n calls it via an **HTTP Request node** → `POST http://compositor:8000/compose` with a JSON body. Same compositing logic, no more runner constraints.
+
 ---
 
 ## Architecture
