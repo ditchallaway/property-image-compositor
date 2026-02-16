@@ -73,7 +73,16 @@
       -655.0003163032234
     ]
   ],
-  "labels": [],
+  "labels": [
+    {
+      "text": "VERIFICATION ST",
+      "anchor_3d": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
   "camera": {
     "world": {
       "position": {

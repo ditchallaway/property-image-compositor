@@ -27,6 +27,12 @@ except ImportError:
     except ImportError:
         print("❌ PyCairo: NOT FOUND")
 
+try:
+    import pytoshop
+    print(f"✅ Pytoshop: {pytoshop.__version__ if hasattr(pytoshop, '__version__') else 'Installed'}")
+except ImportError:
+    print("❌ Pytoshop: NOT FOUND")
+
 # Check mount access
 shared_path = "/data/shared"
 if os.path.exists(shared_path):

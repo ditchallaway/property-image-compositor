@@ -1,12 +1,10 @@
 # Dockerfile
-# Optimized for "Virtual Drone Photography" Image Composition
-# Switched to standard Python base for reliable builds
+# Property Image Compositor — Standalone FastAPI Microservice
 FROM python:3.10-slim
 
 USER root
 
 # 1. Install Runtime & Build Dependencies
-# Combine apt-get update/install/clean to keep layers small
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Build tools
     build-essential \
@@ -26,14 +24,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Install Python packages
-# numpy: heavy lifting for 3D -> 2D projection
-# pillow: base image handling/saving
-# pycairo: vector-grade text and boundary stroke rendering
-RUN pip install --no-cache-dir \
-    numpy \
-    pillow \
-    pycairo
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
 
-# Create app user
+# 3. Create app user and directory
 RUN useradd -m appuser
+WORKDIR /app
+
+# 4. Copy source code
+COPY src/ /app/src/
+
+# 5. Switch to non-root user
 USER appuser
+
+EXPOSE 8000
+
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

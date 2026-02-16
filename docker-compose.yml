@@ -3,20 +3,25 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: compositor_dev
+    container_name: compositor
+    ports:
+      - "8000:8000"
     volumes:
-      # Read-only code mounts for instant updates
+      # Source code mount for development (overrides COPY in Dockerfile)
       - ./src:/app/src:ro
-      - ./scripts:/app/scripts:ro
-      
-      # Read-write data mounts
-      - ./test_data:/app/test_data
+
+      # Data mounts
+      - ./test_data:/app/test_data:ro
       - ./output:/app/output
     environment:
       - PYTHONPATH=/app
     working_dir: /app
-    # Keep container running for exec commands
-    command: tail -f /dev/null
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     networks:
       - compositor_net
 
@@ -32,7 +37,8 @@ services:
     networks:
       - compositor_net
     depends_on:
-      - compositor
+      compositor:
+        condition: service_healthy
 
 networks:
   compositor_net:

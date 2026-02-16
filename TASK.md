@@ -1,24 +1,28 @@
-# Task Checklist - Property Image Compositor
+# Task Checklist — Property Image Compositor
 
-## Planning
-- [x] Define compositor architecture and technology stack
-- [x] Design 3D → 2D projection pipeline
-- [x] Specify boundary styling (stroke, bevel, shadow)
-- [x] Design billboard text rendering strategy
-- [x] Plan n8n integration interface
+## Completed (Pre-Restructure)
+- [x] Matrix-based 3D → 2D projection
+- [x] Boundary overlay renderer
+- [x] Billboard text placement system
+- [x] Styling configuration (fonts, colors, effects)
+- [x] Main composition pipeline
+- [x] Stage 1 (Lines Only) rendering
+- [x] PSD layered export
 
-## Implementation
-- [x] Set up Python project structure
-- [x] Implement matrix-based 3D → 2D projection
-- [x] Create boundary overlay renderer
-- [x] Create billboard text placement system
-- [x] Add styling configuration (fonts, colors, effects)
-- [x] Build main composition pipeline
+## Restructure: FastAPI Microservice
+- [x] Write design doc
+- [x] Update project documents (README, IMPLEMENTATION_PLAN, TASK)
+- [ ] Create `requirements.txt`
+- [ ] Update `Dockerfile` for standalone FastAPI
+- [ ] Update `docker-compose.yml`
+- [ ] Create FastAPI app (`src/api/main.py`)
+- [ ] Remove `runners/Dockerfile`
+- [ ] Verify Docker build
+- [ ] Verify health endpoint
+- [ ] Verify compose endpoint with test data
+- [ ] Verify output via nginx
 
-## Verification
-- [x] Verify n8n runner environment (Smoke Test OK)
-- [x] Test with sample sidecar JSON from renderer
-- [x] Verify boundary overlay alignment
-- [x] Verify street label legibility and positioning
-- [x] Test across different property sizes and camera angles
-- [x] Create n8n workflow integration (Ready for n8n)
+## Future
+- [ ] Verify Stage 1 vs Stage 2 output
+- [ ] Batch compose endpoint (multiple views)
+- [ ] Async processing with job status polling

@@ -1,0 +1,10 @@
+# Core compositor dependencies
+numpy
+pillow
+pycairo
+pytoshop
+six
+
+# REST API
+fastapi
+uvicorn[standard]
